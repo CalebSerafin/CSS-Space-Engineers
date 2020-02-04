@@ -1,0 +1,52 @@
+config:
+
+//Outrigger piston name
+//Outrigger lock name
+//Outrigger Foot name 
+
+//MaxImpulseAxis
+
+init:
+
+//Get blocks: pistons
+//Get pistons with name: outrigger
+
+//Get blocks: landing gear
+//Get landing gears: outrigger lock
+//Get landing gears: outrigger foot
+
+//Get blocks: cockpits
+//Get cockpits: main cockpit
+
+
+Stabilize():
+get cockpit pos and angle
+piston MaxImpulseAxis
+lock outrigger unlock
+autolock feet on
+extend piston
+if previous pos and angle different
+stop piston
+lock outrigger lock
+
+Extend():
+autolock feet on
+piston MaxImpulseAxis
+lock outrigger unlock
+extend piston
+if piston max
+stop piston
+lock outrigger lock
+
+Retract():
+piston MaxImpulseAxis = 0
+autolock feet off
+lock outrigger unlock
+retract piston
+if piston slow
+stop piston
+feet unlock
+retract piston
+if piston min
+stop piston
+lock outrigger lock

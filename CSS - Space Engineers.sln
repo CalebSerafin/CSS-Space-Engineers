@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSS - Space Engineers", "CSS - Space Engineers", "{98BFBE05-5FA3-4376-BFBD-42D921A9E4A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSS - Rover Monitor", "CSS - Rover Monitor\CSS - Rover Monitor.csproj", "{0ADDE6F9-EE7D-42A9-AD75-CB352A1C938B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSS - Outrigger Stabilizer", "CSS - Outrigger Stabilizer\CSS - Outrigger Stabilizer.csproj", "{C419A104-2F00-4B5B-8DA7-3DB9F1D15808}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0ADDE6F9-EE7D-42A9-AD75-CB352A1C938B}.Debug|x64.ActiveCfg = Debug|x64
+		{0ADDE6F9-EE7D-42A9-AD75-CB352A1C938B}.Debug|x64.Build.0 = Debug|x64
+		{C419A104-2F00-4B5B-8DA7-3DB9F1D15808}.Debug|x64.ActiveCfg = Debug|x64
+		{C419A104-2F00-4B5B-8DA7-3DB9F1D15808}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0ADDE6F9-EE7D-42A9-AD75-CB352A1C938B} = {98BFBE05-5FA3-4376-BFBD-42D921A9E4A2}
+		{C419A104-2F00-4B5B-8DA7-3DB9F1D15808} = {98BFBE05-5FA3-4376-BFBD-42D921A9E4A2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43B0714E-7F73-45F2-9451-92991068ECEB}
+	EndGlobalSection
+EndGlobal
