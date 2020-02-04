@@ -34,7 +34,7 @@ namespace IngameScript {
 					Selection = 0;
 				}
 				public static string Render() {
-					string 
+					return "Not Implemented";
 				}
 			}
 		}
