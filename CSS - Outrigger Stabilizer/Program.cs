@@ -166,11 +166,11 @@ namespace IngameScript {
 				Piston.Enabled = false;
 			};
 			if (Operation != Operations.Extended && Operation != Operations.Retracted && Operation != Operations.Stabilized && Lock.IsLocked) {
-				Lock.Enabled = true;							// Klang-tom Forces
+				Lock.Enabled = true;							// Klang-tom Forces (Piston Force on Self Locked Landing Gear)
 				Lock.Unlock();
 				Lock.Enabled = false;
 			};
-			if (Operation != Operations.Retracted) {            // Driving and confusing ResolveOperation
+			if (Operation != Operations.Retracted) {            // Driving or movement confusing ResolveOperation
 				Cockpit.HandBrake = true;
 			};
 		}
