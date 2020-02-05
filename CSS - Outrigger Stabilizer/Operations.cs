@@ -6,7 +6,7 @@
 			public const int Extending = 0;
 			public const int Retracting = 1;
 			public const int Stabilizing = 2;
-			public const int StabilizeCorrecting = 2;
+			public const int StabilizeCorrecting = 3;
 
 
 			public const int Extended = 10;
