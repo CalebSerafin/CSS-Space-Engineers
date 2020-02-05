@@ -26,56 +26,24 @@ namespace IngameScript {
 		private const string OutRiggerPistonName = "OutriggerPiston";
 		private const string OutRiggerLockName = "OutriggerLock";
 		private const string OutRiggerFootName = "OutriggerFoot";
-		private const float OverideTotalLiftForce = 10e6f;
-		private const float OverideOutRiggerLiftForce = 5e3f;
 		//End of config
 
-		//Constants
-		private const float MinImpulseAxis = 100f; 
-		private static class Operations {
-			public const int Unknown = -1;
-
-			public const int Extending = 0;
-			public const int Retracting = 1;
-			public const int Stabilizing = 2;
-			public const int StabilizeCorrecting = 2;
 
 
-			public const int Extended = 10;
-			public const int Retracted = 11;
-			public const int Stabilized = 12;
 
-			public static string Text(int OperationInt) {
-				switch (OperationInt) {
-					case 0: return "Extending";
-					case 1: return "Retracting";
-					case 2: return "Stabilizing";
-					case 3: return "StabilizeCorrecting";
 
-					case 10: return "Extended";
-					case 11: return "Retracted";
-					case 12: return "Stabilized";
 
-					default: return "Unknown";
-				};
-			}
-		}
-		private static class OutrigStatus {
-			public const Sandbox.ModAPI.Ingame.PistonStatus Extended = ExtendMatch ? PistonStatus.Extended : PistonStatus.Retracted;
-			public const Sandbox.ModAPI.Ingame.PistonStatus Extending = ExtendMatch ? PistonStatus.Extending : PistonStatus.Retracting;
-			public const Sandbox.ModAPI.Ingame.PistonStatus Retracted = ExtendMatch ? PistonStatus.Retracted : PistonStatus.Extended;
-			public const Sandbox.ModAPI.Ingame.PistonStatus Retracting = ExtendMatch ? PistonStatus.Retracting : PistonStatus.Extending;
-			public const Sandbox.ModAPI.Ingame.PistonStatus Stopped = PistonStatus.Stopped;
-		}
+
+
+
+
 		//Persistent Variables
-		IMyCockpit Cockpit;
-		private IMyExtendedPistonBase Piston;
-		private IMyLandingGear Lock;
-		private IMyLandingGear Foot;
-
 		private static int Operation = Operations.Unknown;
-		private static float TotalLiftForce = 0f;
-		private static float OutRiggerLiftForce = 0f;
+		StringGraphics.ArrowSelector OperationGraphic = new StringGraphics.ArrowSelector();
+		IMyCockpit Cockpit;
+		private static IMyExtendedPistonBase Piston;
+		private static IMyLandingGear Lock;
+		private static IMyLandingGear Foot;
 		//Delta Variables
 		private static float PistonLastLength = -1;
 		//Functions
@@ -85,11 +53,14 @@ namespace IngameScript {
 		private static Func<IMyTerminalBlock, bool> IsName(string CustNameString) {
 			return (Block) => Block.CustomName.Contains(CustNameString);
 		}
-		private void UpdateDeltaVariables() {
-			PistonLastLength = Piston.CurrentPosition;
+		private static void UpdateDeltaVariables() {
+			if (Piston != null) { PistonLastLength = Piston.CurrentPosition; };
 		}
-
 		public Program() {
+			OperationGraphic.ArrowText = "Operation=> ";
+			OperationGraphic.Options = Operations.ToArray();
+			OperationGraphic.Selection = (UInt16)Operations.ToArrayIndex(-1);
+
 			Runtime.UpdateFrequency = UpdateFrequency.Once;
 			List<IMyTerminalBlock> PistonsDubious = new List<IMyTerminalBlock>();
 			List<IMyTerminalBlock> LocksDubious = new List<IMyTerminalBlock>();
@@ -107,24 +78,28 @@ namespace IngameScript {
 				break;
 			};
 			foreach (IMyTerminalBlock LandingGear in LocksDubious) {
-				if (!IsType("LandingGear")(LandingGear)) continue; 
+				if (!IsType("LandingGear")(LandingGear)) continue;
 				Lock = (IMyLandingGear)LandingGear;
 				break;
 			};
 			foreach (IMyTerminalBlock LandingGear in FeetDubious) {
-				if (!IsType("LandingGear")(LandingGear)) continue; 
+				if (!IsType("LandingGear")(LandingGear)) continue;
 				Foot = (IMyLandingGear)LandingGear;
 				break;
 			};
 			foreach (IMyCockpit X in Cockpits) {
 				if (!X.IsMainCockpit) continue;
-				Cockpit = X; 
+				Cockpit = X;
 				break;
 			};
 			UpdateDeltaVariables();
 		}
 
 		private void ResolveOperation() {
+			if (Piston == null) {
+				Operation = Operations.Broken;
+				return;
+			}
 			if (Piston.Velocity == 0) {
 				if (Piston.Status == OutrigStatus.Extended) {
 					Operation = Operations.Extended;
@@ -157,8 +132,9 @@ namespace IngameScript {
 
 		public void Main(string argument, UpdateType updateSource) {
 			if (Operation == Operations.Unknown) ResolveOperation();
-			Echo("Current Operation: " + Operations.Text(Operation));
 
+			OperationGraphic.Selection = (UInt16)Operations.ToArrayIndex(Operation);
+			Echo(OperationGraphic.Render());
 		}
 	}
 }

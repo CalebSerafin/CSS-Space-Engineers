@@ -21,9 +21,9 @@ namespace IngameScript {
 	partial class Program : MyGridProgram {
 		private static short N100Tick = 10;
 		private const short SkipN100Ticks = 10;
-		private static List<IMyRadioAntenna> Antennas = new List<IMyRadioAntenna>();
-		private static List<IMyFunctionalBlock> Engines = new List<IMyFunctionalBlock>();
-		private static List<IMyGasGenerator> O2H2Gens = new List<IMyGasGenerator>();
+		private static readonly List<IMyRadioAntenna> Antennas = new List<IMyRadioAntenna>();
+		private static readonly List<IMyFunctionalBlock> Engines = new List<IMyFunctionalBlock>();
+		private static readonly List<IMyGasGenerator> O2H2Gens = new List<IMyGasGenerator>();
 		private static readonly Action<IMyFunctionalBlock, string> ApplyAction = (Block, ActionName) => Block.GetActionWithName(ActionName).Apply(Block);
 		private static Func<IMyTerminalBlock, bool> IsType(string TypeIdString) {
 			return (block) => block.BlockDefinition.TypeIdString.Contains(TypeIdString);

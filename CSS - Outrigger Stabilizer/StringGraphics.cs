@@ -21,20 +21,38 @@ namespace IngameScript {
 	partial class Program : MyGridProgram {
 		public class StringGraphics {
 			public class ArrowSelector {
-				public static string ArrowText;
-				public static List<string> Options;
-				public static UInt16 Selection;
+				public string ArrowText;     // Default "-->"
+				public string[] Options;
+				public UInt16 Selection;		// Zero-Based Index
+				public Boolean MovingArrow;  // False = Moving List
 				
-				private static string Padding() {
-					return new String(' ', ArrowText.Length);
+				public ArrowSelector(string ArrowTextX = "--> ", string[] OptionsX = null, UInt16 SelectionX = 0, Boolean MovingArrowX = true) {
+					ArrowText = ArrowTextX;
+					Options = OptionsX ?? Array.Empty<string>();
+					Selection = SelectionX;
+					MovingArrow = MovingArrowX;
 				}
-				public ArrowSelector() {
-					ArrowText = "-->";
-					Options = new List<string>();
-					Selection = 0;
-				}
-				public static string Render() {
-					return "Not Implemented";
+
+				public string Render() {
+					string RenderOut = "";
+					string Padding = new String(' ', ArrowText.Length);
+					UInt16 OptionsCount = (UInt16)Options.Count();
+					Selection = (UInt16) (Selection % OptionsCount);
+
+					if (MovingArrow) {
+						for (int i = 0; i < OptionsCount; i++) {
+							RenderOut += ((Selection == i) ? ArrowText : Padding) + Options[i] + '\n';
+						}
+					} else {
+						RenderOut += ArrowText + Options[Selection] + '\n';
+						for (int i = Selection + 1; i < OptionsCount; i++) {
+							RenderOut += Padding + Options[i] + '\n';
+						}
+						for (int i = 0; i < Selection; i++) {
+							RenderOut += Padding + Options[i] + '\n';
+						}
+					}
+					return RenderOut;
 				}
 			}
 		}
