@@ -1,3 +1,19 @@
 ﻿THIS SCRIPT CURRENTLY ONLY SUPPORTS ONE OUTRIGGER. SORRY FOR INCONVIENCE.
 
 Find Source code at https://github.com/CalebSerafin/CSS-Space-Engineers.
+
+Required Physical Setup:
+(1) Piston facing down or up (If it pushes shaft up, ExtendMatch = false).
+(2) End of Piston connects to long shaft that can retract down.
+(3) Long shaft has Landing Gear at the bottom.
+(4) Another Landing Gear directed attached to platform should be able to lock directly to the shaft.
+
+Required Name Setup:
+(1) Piston is PistonName.
+(2) Long Shaft Landing Gear is FootName.
+(3) Platform Landing Gear is FoorName.
+
+Optional Setup:
+(1) LCD for status is StatusLCDsName.
+(2) LCD for current command is ConsoleLCDsName.
+
