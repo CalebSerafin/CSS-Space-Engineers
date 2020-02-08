@@ -38,6 +38,11 @@
   <Import Project="MDK/MDK.options.props" />
   <Import Project="MDK/MDK.paths.props" Condition="exists('MDK/MDK.paths.props')" />
   <ItemGroup>
+    <Compile Include="Governor.cs" />
+    <Compile Include="LCD.cs" />
+    <Compile Include="Program.Program.cs" />
+    <Compile Include="RenderMaxImpulseAxis.cs" />
+    <Compile Include="ResolveOperation.cs" />
     <Compile Include="WarningFlags.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="Execution.cs" />
