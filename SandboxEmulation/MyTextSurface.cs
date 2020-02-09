@@ -11,48 +11,29 @@ namespace IngameScript {
 			private List<string> ImageSelection = new List<string>();
 			private StringBuilder Text;
 			// InterMyTextSurface Actions
-			public void CopyTo(Sandbox.ModAPI.Ingame.IMyTextSurface Target, bool IncludeContent = true) {
-				Target.FontSize = FontSize;
-				Target.FontColor = FontColor;
-				Target.BackgroundColor = BackgroundColor;
-				Target.BackgroundAlpha = BackgroundAlpha;
-				Target.ChangeInterval = ChangeInterval;
-				Target.Font = Font;
-				Target.Alignment = Alignment;
+			public static void Copy(Sandbox.ModAPI.Ingame.IMyTextSurface Source, Sandbox.ModAPI.Ingame.IMyTextSurface Target, bool IncludeContent = true) {
+				Target.FontSize = Source.FontSize;
+				Target.FontColor = Source.FontColor;
+				Target.BackgroundColor = Source.BackgroundColor;
+				Target.BackgroundAlpha = Source.BackgroundAlpha;
+				Target.ChangeInterval = Source.ChangeInterval;
+				Target.Font = Source.Font;
+				Target.Alignment = Source.Alignment;
 
-				Target.PreserveAspectRatio = PreserveAspectRatio;
-				Target.TextPadding = TextPadding;
-				Target.ScriptBackgroundColor = ScriptBackgroundColor;
-				Target.ScriptForegroundColor = ScriptForegroundColor;
-
-				if (IncludeContent) {
-					Target.ContentType = ContentType;
-					Target.Script = Script;
-					Target.ClearImagesFromSelection(); List<string> Images = new List<string>(); GetSelectedImages(Images); Target.AddImagesToSelection(Images);
-					Target.WriteText(GetText());
-				}
-			}
-			public void CopyFrom(Sandbox.ModAPI.Ingame.IMyTextSurface Source, bool IncludeContent = true) {
-				FontSize = Source.FontSize;
-				FontColor = Source.FontColor;
-				BackgroundColor = Source.BackgroundColor;
-				BackgroundAlpha = Source.BackgroundAlpha;
-				ChangeInterval = Source.ChangeInterval;
-				Font = Source.Font;
-				Alignment = Source.Alignment;
-
-				PreserveAspectRatio = Source.PreserveAspectRatio;
-				TextPadding = Source.TextPadding;
-				ScriptBackgroundColor = Source.ScriptBackgroundColor;
-				ScriptForegroundColor = Source.ScriptForegroundColor;
+				Target.PreserveAspectRatio = Source.PreserveAspectRatio;
+				Target.TextPadding = Source.TextPadding;
+				Target.ScriptBackgroundColor = Source.ScriptBackgroundColor;
+				Target.ScriptForegroundColor = Source.ScriptForegroundColor;
 
 				if (IncludeContent) {
-					ContentType = Source.ContentType;
-					Script = Source.Script;
-					ClearImagesFromSelection(); List<string> Images = new List<string>(); Source.GetSelectedImages(Images); AddImagesToSelection(Images);
-					WriteText(Source.GetText());
+					Target.ContentType = Source.ContentType;
+					Target.Script = Source.Script;
+					Target.ClearImagesFromSelection(); List<string> Images = new List<string>(); Source.GetSelectedImages(Images); Target.AddImagesToSelection(Images);
+					Target.WriteText(Source.GetText());
 				}
 			}
+			public void CopyTo(Sandbox.ModAPI.Ingame.IMyTextSurface Target, bool IncludeContent = true) => Copy(this, Target, IncludeContent);
+			public void CopyFrom(Sandbox.ModAPI.Ingame.IMyTextSurface Source, bool IncludeContent = true) => Copy(Source, this, IncludeContent);
 
 
 			// Default Interface
