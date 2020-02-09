@@ -7,7 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSS - Rover Monitor", "CSS 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSS - Outrigger Stabilizer", "CSS - Outrigger Stabilizer\CSS - Outrigger Stabilizer.csproj", "{C419A104-2F00-4B5B-8DA7-3DB9F1D15808}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CSS - SandboxEmulation", "SandboxEmulation\CSS - SandboxEmulation.shproj", "{C18E4FDE-FF11-4E2D-8308-9EA5B3040542}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SandboxEmulation\SandboxEmulation.projitems*{c18e4fde-ff11-4e2d-8308-9ea5b3040542}*SharedItemsImports = 13
+		SandboxEmulation\SandboxEmulation.projitems*{c419a104-2f00-4b5b-8da7-3db9f1d15808}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 	EndGlobalSection
