@@ -84,6 +84,10 @@ namespace IngameScript {
 				"UpdateType: " + updateSource.ToString() + '\n'
 			); ;
 			Governor();
+
+
+
+			Echo(Me.GetSurface(0).MeasureStringInPixels(new StringBuilder("Hello World"), "DEBUG", 1).ToString());
 		}
 	}
 }
