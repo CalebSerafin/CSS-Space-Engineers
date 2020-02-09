@@ -6,16 +6,12 @@ using VRageMath;
 
 namespace IngameScript {
 	public static partial class SandboxEmulation {
-		private class MyTextSurface : Sandbox.ModAPI.Ingame.IMyTextSurface {
+		public partial class MyTextSurface : Sandbox.ModAPI.Ingame.IMyTextSurface {
 			// Back-end
-
-
-			/// <summary>
-			/// The selected image ids.
-			/// </summary>
+			/// <summary>The selected image ids.</summary>
 			private List<string> ImageSelection = new List<string>();
+			/// <summary>Display Text Buffer.</summary>
 			private StringBuilder Text;
-
 			// Inter-MyTextSurface-Actions
 			public static void Copy(Sandbox.ModAPI.Ingame.IMyTextSurface Source, Sandbox.ModAPI.Ingame.IMyTextSurface Target, bool IncludeContent = true) {
 				Target.FontSize = Source.FontSize;
@@ -38,6 +34,13 @@ namespace IngameScript {
 					Target.WriteText(Source.GetText());
 				}
 			}
+			/// <summary>
+			/// Copies all writeable properties between TextSurfaces.
+			/// Copies non read-only to target if it's Emulated.
+			/// </summary>
+			/// <param name="Source"></param>
+			/// <param name="Target"></param>
+			/// <param name="IncludeContent"></param>
 			public static void Copy(Sandbox.ModAPI.Ingame.IMyTextSurface Source, MyTextSurface Target, bool IncludeContent = true) {
 				Copy(Source, Target, IncludeContent);
 				Target.CurrentlyShownImage = Source.CurrentlyShownImage;
@@ -51,7 +54,18 @@ namespace IngameScript {
 				Target.GetSpritesX = Source.GetSprites;
 				Target.MeasureStringInPixelsX = Source.MeasureStringInPixels;
 			}
+			/// <summary>
+			/// Copies all writeable properties To TextSurface.
+			/// </summary>
+			/// <param name="Target"></param>
+			/// <param name="IncludeContent"></param>
 			public void CopyTo(Sandbox.ModAPI.Ingame.IMyTextSurface Target, bool IncludeContent = true) => Copy(this, Target, IncludeContent);
+			/// <summary>
+			/// Copies all writeable properties From TextSurface.
+			/// Also copies read-only properties from source.
+			/// </summary>
+			/// <param name="Source"></param>
+			/// <param name="IncludeContent"></param>
 			public void CopyFrom(Sandbox.ModAPI.Ingame.IMyTextSurface Source, bool IncludeContent = true) => Copy(Source, this, IncludeContent);
 
 			/// <summary>
@@ -68,7 +82,7 @@ namespace IngameScript {
 
 				PreserveAspectRatio = false;
 				TextPadding = 2.0f;
-				ScriptBackgroundColor = Color.FromNonPremultiplied(0, 88, 151, 255);
+				ScriptBackgroundColor = Color.FromNonPremultiplied(0, 88, 151, 255);			//No colour preset matches default colour values.
 				ScriptForegroundColor = Color.FromNonPremultiplied(179, 237, 255, 255);
 
 				ContentType = ContentType.NONE;
@@ -82,10 +96,10 @@ namespace IngameScript {
 				Name = "Emulation";
 				DisplayName = "Emulation";
 
-				GetFontsX = (List<string> fonts) => fonts = new List<string>();
-				GetScriptsX = (List<string> scripts) => scripts = new List<string>();
-				GetSpritesX = (List<string> sprites) => sprites = new List<string>();
-				MeasureStringInPixelsX = (StringBuilder text, string font, float scale) => new Vector2(0, 0);   // function is currently broken and returns 0. So default return 0 will be accurate guess.
+				GetFontsX = (List<string> fonts) => fonts = Cached.GetFonts;
+				GetScriptsX = (List<string> scripts) => scripts = Cached.GetScripts;
+				GetSpritesX = (List<string> sprites) => sprites = Cached.GetSprites;
+				MeasureStringInPixelsX = (StringBuilder text, string font, float scale) => Cached.MeasureStringInPixels;
 			}
 			// Default Interface
 			public string CurrentlyShownImage { get; set; }		// Interface Read-only
@@ -129,11 +143,11 @@ namespace IngameScript {
 				MySpriteDrawFrame Frame = new MySpriteDrawFrame();
 				return Frame;
 			}
-			/// <summary>Gets a list of available fonts</summary>
+			/// <summary>Gets a list of available fonts.</summary>
 			private Action<List<string>> GetFontsX;											// Interface Method
 			public void GetFonts(List<string> fonts) { GetFontsX(fonts); }
 
-			/// <summary>Gets a list of available scripts</summary>
+			/// <summary>Gets a list of available scripts.</summary>
 			private Action<List<string>> GetScriptsX;										// Interface Method
 			public void GetScripts(List<string> scripts) { GetScriptsX(scripts); }
 
@@ -141,7 +155,7 @@ namespace IngameScript {
 				output.AddRange(ImageSelection);
 			}
 
-			/// <summary>Gets a list of available sprites</summary>
+			/// <summary>Gets a list of available sprites.</summary>
 			private Action<List<string>> GetSpritesX;										// Interface Method
 			public void GetSprites(List<string> sprites) { GetSpritesX(sprites); }
 

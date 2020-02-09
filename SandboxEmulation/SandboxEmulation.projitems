@@ -9,6 +9,10 @@
     <Import_RootNamespace>SandboxEmulation</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)MyTextSurface.Cached.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MyTextSurface.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)MyTextSurface.cs.vsspell" />
   </ItemGroup>
 </Project>
