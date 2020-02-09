@@ -10,6 +10,9 @@ namespace IngameScript {
 			// Back-end
 			private List<string> ImageSelection = new List<string>();
 			private StringBuilder Text;
+
+			private List<string> GetFonts_Return;
+			private List<string> GetScripts_Return;
 			// InterMyTextSurface Actions
 			public static void Copy(Sandbox.ModAPI.Ingame.IMyTextSurface Source, Sandbox.ModAPI.Ingame.IMyTextSurface Target, bool IncludeContent = true) {
 				Target.FontSize = Source.FontSize;
@@ -32,12 +35,27 @@ namespace IngameScript {
 					Target.WriteText(Source.GetText());
 				}
 			}
+			public static void Copy(Sandbox.ModAPI.Ingame.IMyTextSurface Source, MyTextSurface Target, bool IncludeContent = true) {
+				Copy(Source, Target, IncludeContent);
+				if (IncludeContent) {
+					Target.CurrentlyShownImage = Source.CurrentlyShownImage;
+					Target.SurfaceSize = Source.SurfaceSize;
+					Target.TextureSize = Source.TextureSize;
+					Target.Name = Source.Name;
+					Target.DisplayName = Source.DisplayName;
+
+					Target.GetFontsX = Source.GetFonts;
+					Target.GetScriptsX = Source.GetScripts;
+					Target.GetSpritesX = Source.GetSprites;
+					Target.MeasureStringInPixelsX = Source.MeasureStringInPixels;
+				}
+			}
 			public void CopyTo(Sandbox.ModAPI.Ingame.IMyTextSurface Target, bool IncludeContent = true) => Copy(this, Target, IncludeContent);
 			public void CopyFrom(Sandbox.ModAPI.Ingame.IMyTextSurface Source, bool IncludeContent = true) => Copy(Source, this, IncludeContent);
 
 
 			// Default Interface
-			public string CurrentlyShownImage => null;
+			public string CurrentlyShownImage { get; set; }		// Interface Read-only
 
 			public float FontSize { get; set; }
 			public Color FontColor { get; set; }
@@ -49,18 +67,18 @@ namespace IngameScript {
 			public string Script { get; set; }
 			public ContentType ContentType { get; set; }
 
-			public Vector2 SurfaceSize => new Vector2();    // Not Implemented
+			public Vector2 SurfaceSize { get; private set; }	// Interface Read-only
 
-			public Vector2 TextureSize => new Vector2( );    // Not Implemented
+			public Vector2 TextureSize { get; private set; }	// Interface Read-only
 
 			public bool PreserveAspectRatio { get; set; }
 			public float TextPadding { get; set; }
 			public Color ScriptBackgroundColor { get; set; }
 			public Color ScriptForegroundColor { get; set; }
 
-			public string Name => "Emulation";
+			public string Name { get; set; }                    // Interface Read-only
 
-			public string DisplayName => "Emulation";
+			public string DisplayName { get; set; }             // Interface Read-only
 
 			public void AddImagesToSelection(List<string> ids, bool checkExistence = false) {
 				ImageSelection.AddRange(ids);
@@ -79,26 +97,25 @@ namespace IngameScript {
 				return Frame;
 			}
 
-			public void GetFonts(List<string> fonts) {	// Not Implemented
-			}
+			public Action<List<string>> GetFontsX;											// Interface Method
+			public void GetFonts(List<string> fonts) { GetFontsX(fonts); }
 
-			public void GetScripts(List<string> scripts) {  // Not Implemented
-			}
+			private Action<List<string>> GetScriptsX;										// Interface Method
+			public void GetScripts(List<string> scripts) { GetScriptsX(scripts); }
 
 			public void GetSelectedImages(List<string> output) {
 				output.AddRange(ImageSelection);
 			}
 
-			public void GetSprites(List<string> sprites) {  // Not Implemented
-			}
+			public Action<List<string>> GetSpritesX;										// Interface Method
+			public void GetSprites(List<string> sprites) { GetSpritesX(sprites); }
 
 			public string GetText() {
 				return Text.ToString();
 			}
 
-			public Vector2 MeasureStringInPixels(StringBuilder text, string font, float scale) {    // Not Implemented
-				return new Vector2();
-			}
+			public Func<StringBuilder, string, float, Vector2> MeasureStringInPixelsX;		// Interface Method
+			public Vector2 MeasureStringInPixels(StringBuilder text, string font, float scale) { return MeasureStringInPixelsX(text, font, scale); }
 
 			public void ReadText(StringBuilder buffer, bool append = false) {
 				if (!append) buffer.Clear();
