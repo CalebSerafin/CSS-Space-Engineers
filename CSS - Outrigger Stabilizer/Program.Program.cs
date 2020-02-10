@@ -64,13 +64,15 @@ namespace IngameScript {
 			StatusLCDs.ContentType = ContentType.TEXT_AND_IMAGE;
 			StatusLCDs.Font = "Monospace";
 			StatusLCDs.AutoSyncText = false;
+			Echo("Before Copy");
 			StatusLCDs.CopyTo(ConsoleLCDs);
 			List<IMyTerminalBlock> StatusLCDsDubious = new List<IMyTerminalBlock>();
 			GridTerminalSystem.GetBlocksOfType<IMyTextSurface>(StatusLCDsDubious, IsName(StatusLCDsName));
 			StatusLCDs.ConnectDisplay(StatusLCDsDubious);
 			List<IMyTerminalBlock> ConsoleLCDsDubious = new List<IMyTerminalBlock>();
 			GridTerminalSystem.GetBlocksOfType<IMyTextSurface>(ConsoleLCDsDubious, IsName(ConsoleLCDsName));
-			StatusLCDs.ConnectDisplay(ConsoleLCDsDubious);
+			ConsoleLCDs.ConnectDisplay(ConsoleLCDsDubious);
+
 		}
 	}
 }

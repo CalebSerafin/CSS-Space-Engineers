@@ -46,8 +46,8 @@ namespace IngameScript {
 		private static int Operation = Operations.Unknown;
 		StringGraphics.ArrowSelector OperationGraphic = new StringGraphics.ArrowSelector();
 		StringGraphics.ArrowSelector CommandGraphic = new StringGraphics.ArrowSelector();
-		LCDNet StatusLCDs;
-		LCDNet ConsoleLCDs;
+		LCDNet StatusLCDs = new LCDNet();
+		LCDNet ConsoleLCDs = new LCDNet();
 
 		private static IMyCockpit Cockpit;
 		private static IMyExtendedPistonBase Piston;
@@ -79,14 +79,15 @@ namespace IngameScript {
 			}
 			;
 			OperationGraphic.Selection = (UInt16)Operations.ToArrayIndex(Operation);
-			StatusLCDs.WriteText(OperationGraphic.Render()+RenderMaxImpulseAxis());
-			Echo(
-				RenderMaxImpulseAxis() + 
-				"Argument: " + (argument ?? "Null") + '\n' +
-				"UpdateType: " + updateSource.ToString() + '\n'
-			); ;
-			StatusLCDs.SyncText();
-			ConsoleLCDs.SyncText();
+			StatusLCDs.WriteText(OperationGraphic.Render(), true);
+			StatusLCDs.WriteText(RenderMaxImpulseAxis(), true);
+			ConsoleLCDs.WriteText(RenderMaxImpulseAxis(), true);
+			ConsoleLCDs.WriteText("Argument: " + (argument ?? "Null") + '\n', true);
+			ConsoleLCDs.WriteText("UpdateType: " + updateSource.ToString() + '\n', true);
+
+			Echo(ConsoleLCDs.GetText());
+			StatusLCDs.FlushText();
+			ConsoleLCDs.FlushText();
 			Governor();
 		}
 	}
