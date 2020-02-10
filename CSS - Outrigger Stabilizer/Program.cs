@@ -46,6 +46,9 @@ namespace IngameScript {
 		private static int Operation = Operations.Unknown;
 		StringGraphics.ArrowSelector OperationGraphic = new StringGraphics.ArrowSelector();
 		StringGraphics.ArrowSelector CommandGraphic = new StringGraphics.ArrowSelector();
+		LCDNet StatusLCDs;
+		LCDNet ConsoleLCDs;
+
 		private static IMyCockpit Cockpit;
 		private static IMyExtendedPistonBase Piston;
 		private static IMyLandingGear Lock;
@@ -74,10 +77,9 @@ namespace IngameScript {
 				default:
 					break;
 			}
-
-
+			;
 			OperationGraphic.Selection = (UInt16)Operations.ToArrayIndex(Operation);
-			LCDWriteText(OperationGraphic.Render()+RenderMaxImpulseAxis());
+			StatusLCDs.WriteText(OperationGraphic.Render()+RenderMaxImpulseAxis());
 			Echo(
 				RenderMaxImpulseAxis() + 
 				"Argument: " + (argument ?? "Null") + '\n' +

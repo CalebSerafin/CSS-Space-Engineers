@@ -60,7 +60,17 @@ namespace IngameScript {
 				GravAccel = (float)Cockpit.GetTotalGravity().Length();
 				break;
 			};
-			LCDInit();
+
+			StatusLCDs.ContentType = ContentType.TEXT_AND_IMAGE;
+			StatusLCDs.Font = "Monospace";
+			StatusLCDs.AutoSyncText = false;
+			StatusLCDs.CopyTo(ConsoleLCDs);
+			List<IMyTerminalBlock> StatusLCDsDubious = new List<IMyTerminalBlock>();
+			GridTerminalSystem.GetBlocksOfType<IMyTextSurface>(StatusLCDsDubious, IsName(StatusLCDsName));
+			StatusLCDs.ConnectDisplay(StatusLCDsDubious);
+			List<IMyTerminalBlock> ConsoleLCDsDubious = new List<IMyTerminalBlock>();
+			GridTerminalSystem.GetBlocksOfType<IMyTextSurface>(ConsoleLCDsDubious, IsName(ConsoleLCDsName));
+			StatusLCDs.ConnectDisplay(ConsoleLCDsDubious);
 		}
 	}
 }
