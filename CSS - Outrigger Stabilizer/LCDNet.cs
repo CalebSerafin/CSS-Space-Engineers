@@ -60,61 +60,80 @@ namespace IngameScript {
 			}
 		}
 	}
+	//Throw the above in a dumpster when the code below is finished.
 
-	public class LCDNet : MyGridProgram {
-		private static Func<IMyTerminalBlock, bool> IsType(string TypeIdString) {
-			return (Block) => Block.BlockDefinition.TypeIdString.Contains(TypeIdString);
-		}
-		private static Func<IMyTerminalBlock, bool> IsName(string CustNameString) {
-			return (Block) => Block.CustomName.Contains(CustNameString);
-		}
 
-		public List<IMyTextSurface> LCDList { get; } = new List<IMyTextSurface>();
-		public string TextBuffer { get; }
+	public class LCDNet : SandboxEmulation.MyTextSurface {
+		public List<IMyTextSurface> DisplayList { get; } = new List<IMyTextSurface>();
 
-		public static void Clone(IMyTextSurface SourceLCD, IMyTextSurface TargetLCD, bool IncludeContent = false) {
-			TargetLCD.Alignment = SourceLCD.Alignment;
-			TargetLCD.BackgroundAlpha = SourceLCD.BackgroundAlpha;
-			TargetLCD.BackgroundColor = SourceLCD.BackgroundColor;
-			TargetLCD.ChangeInterval = SourceLCD.ChangeInterval;
-			TargetLCD.Font = SourceLCD.Font;
-			TargetLCD.FontColor = SourceLCD.FontColor;
-			TargetLCD.FontSize = SourceLCD.FontSize;
-			TargetLCD.ScriptBackgroundColor = SourceLCD.ScriptBackgroundColor;
-			TargetLCD.ScriptForegroundColor = SourceLCD.ScriptForegroundColor;
 
-			if (IncludeContent) {
-				TargetLCD.ClearImagesFromSelection(); List<string> Images = new List<string>(); SourceLCD.GetSelectedImages(Images); TargetLCD.AddImagesToSelection(Images);
-				TargetLCD.ContentType = SourceLCD.ContentType;
-				TargetLCD.Script = SourceLCD.Script;
-				TargetLCD.WriteText(SourceLCD.GetText());
+		private void BroadcastText() {
+			foreach (IMyTextPanel Surface in DisplayList) {
+				Surface.WriteText(Text, false);
 			}
+		}
+		public new bool WriteText(string value, bool append = false) {
+			try {
+				if (!append) {
+					Text.Clear();
+				}
+				Text.Append(value);
+			} catch (Exception) {
+				return false;
+			}
+			BroadcastText();
+			return true;
+		}
 
-		}
-		public void Redraw(IMyTextSurface LCD) {
-			LCD.WriteText(TextBuffer);
-		}
-		public void Add(IMyTextSurface LCD) {
-			LCDList.Add(LCD);
-			Redraw(LCD);
+		public new bool WriteText(System.Text.StringBuilder value, bool append = false) {
+			try {
+				if (append) {
+					Text.Append(value);
+				} else {
+					Text = value;
+				}
+			} catch (Exception) {
+				return false;
+			}
+			BroadcastText();
+			return true;
 		}
 
-		public void Add(IMyTextSurfaceProvider LCDHolder) {
+		/// <summary>
+		/// Connects to a new block that is only has one display.
+		/// </summary>
+		/// <param name="NewLCD">Example: A Text Panel</param>
+		public void ConnectDisplay(IMyTextSurface NewLCD) {
+			DisplayList.Add(NewLCD);
+			CopyTo(NewLCD, true);
+		}
+
+		/// <summary>
+		/// Connects to all displays in a block that has multiple displays.
+		/// </summary>
+		/// <param name="LCDHolder">Example: A Cockpit.</param>
+		public void ConnectDisplay(IMyTextSurfaceProvider LCDHolder) {
 			for (int i = 0; i < LCDHolder.SurfaceCount; i++) {
-				LCDList.Add(LCDHolder.GetSurface(i));
+				ConnectDisplay(LCDHolder.GetSurface(i));
 			}
 		}
-
-		private void WriteText(string Value, bool append = false) {
-			if (LCDList.Count < 1) {
-				Echo("LCD Not Found!");
-				Echo(Value);
-				return;
-			};
-			foreach (IMyTextPanel LCD in LCDList) {
-				LCD.WriteText(Value, append);
+		/// <summary>
+		/// Re-syncs settings in provided display.
+		/// </summary>
+		/// <param name="Display">Example: A Text Panel</param>
+		public void Refresh(IMyTextSurface Display) {
+			if (Display != null) {
+				CopyTo(Display);
 			}
 		}
+		/// <summary>
+		/// Re-syncs settings in all connected displays.
+		/// </summary>
+		public void Refresh() {
+			foreach (IMyTextSurface Display in DisplayList) {
+				Refresh(Display);
+			}
 
+		}
 	}
 }
