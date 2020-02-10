@@ -8,8 +8,8 @@ namespace IngameScript {
 	public static partial class SandboxEmulation {
 		public partial class MyTextSurface : Sandbox.ModAPI.Ingame.IMyTextSurface {
 			// Back-end
-			/// <summary>The selected image ids.</summary>
-			protected List<string> ImageSelection = new List<string>();
+		/// <summary>The selected image ids.</summary>
+		protected List<string> ImageSelection = new List<string>();
 			/// <summary>Display Text Buffer.</summary>
 			protected StringBuilder Text;
 			// Inter-MyTextSurface-Actions
@@ -79,17 +79,17 @@ namespace IngameScript {
 				ChangeInterval = 0.0f;
 				Font = "DEBUG";
 				Alignment = TextAlignment.LEFT;
-
+				
 				PreserveAspectRatio = false;
 				TextPadding = 2.0f;
 				ScriptBackgroundColor = Color.FromNonPremultiplied(0, 88, 151, 255);			//No colour preset matches default colour values.
 				ScriptForegroundColor = Color.FromNonPremultiplied(179, 237, 255, 255);
-
+				
 				ContentType = ContentType.NONE;
 				Script = "";
 				ImageSelection = new List<string>();
-				Text.Append("");
-
+				Text = new StringBuilder();
+				
 				CurrentlyShownImage = null;
 				SurfaceSize = new Vector2(0, 0);
 				TextureSize = new Vector2(0, 0);
@@ -100,6 +100,7 @@ namespace IngameScript {
 				GetScriptsX = (List<string> scripts) => scripts = Cached.GetScripts;
 				GetSpritesX = (List<string> sprites) => sprites = Cached.GetSprites;
 				MeasureStringInPixelsX = (StringBuilder text, string font, float scale) => Cached.MeasureStringInPixels;
+				
 			}
 			// Default Interface
 			public string CurrentlyShownImage { get; set; }		// Interface Read-only
