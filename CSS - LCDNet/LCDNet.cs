@@ -29,11 +29,20 @@ namespace IngameScript {
 		/// false: Waits on manual BroadcastText() invocation.
 		/// </summary>
 		public bool AutoSyncText { get; set; } = true;
-
+		/// <summary>
+		/// Syncs text with connected displays.
+		/// </summary>
 		public void SyncText() {
 			foreach (IMyTextPanel Display in ConnectedDisplays) {
 				Display.WriteText(Text, false);
 			}
+		}
+		/// <summary>
+		/// Syncs Text and empties buffer.
+		/// </summary>
+		public void FlushText() {
+			SyncText();
+			Text = new StringBuilder();
 		}
 		/// <summary>
 		/// Syncs text to all connected displays.
@@ -101,9 +110,7 @@ namespace IngameScript {
 		public void ConnectDisplay(List<IMyTerminalBlock> DubiousDisplays) {
 
 			foreach (IMyTerminalBlock DubiousDisplay in DubiousDisplays) {
-				if (DubiousDisplay.BlockDefinition.TypeIdString.Contains("TextSurface")) {
-					ConnectDisplay((IMyTextSurface)DubiousDisplay);
-				}
+				ConnectDisplay((IMyTextSurface)DubiousDisplay);
 			}
 		}
 		/// <summary>
