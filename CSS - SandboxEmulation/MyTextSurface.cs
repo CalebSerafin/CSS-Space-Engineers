@@ -9,9 +9,9 @@ namespace IngameScript {
 		public partial class MyTextSurface : Sandbox.ModAPI.Ingame.IMyTextSurface {
 			// Back-end
 			/// <summary>The selected image ids.</summary>
-			private List<string> ImageSelection = new List<string>();
+			protected List<string> ImageSelection = new List<string>();
 			/// <summary>Display Text Buffer.</summary>
-			private StringBuilder Text;
+			protected StringBuilder Text;
 			// Inter-MyTextSurface-Actions
 			public static void Copy(Sandbox.ModAPI.Ingame.IMyTextSurface Source, Sandbox.ModAPI.Ingame.IMyTextSurface Target, bool IncludeContent = true) {
 				Target.FontSize = Source.FontSize;
