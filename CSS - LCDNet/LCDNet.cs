@@ -30,7 +30,7 @@ namespace IngameScript {
 		/// </summary>
 		public bool AutoSyncText { get; set; } = true;
 
-		private void BroadcastText() {
+		public void SyncText() {
 			foreach (IMyTextPanel Display in ConnectedDisplays) {
 				Display.WriteText(Text, false);
 			}
@@ -38,8 +38,8 @@ namespace IngameScript {
 		/// <summary>
 		/// Syncs text to all connected displays.
 		/// </summary>
-		public void WriteTextHook() {
-			if (AutoSyncText) BroadcastText();
+		private void WriteTextHook() {
+			if (AutoSyncText) SyncText();
 		}
 		public new bool WriteText(string value, bool append = false) {
 			try {

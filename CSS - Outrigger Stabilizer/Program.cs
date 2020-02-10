@@ -85,6 +85,8 @@ namespace IngameScript {
 				"Argument: " + (argument ?? "Null") + '\n' +
 				"UpdateType: " + updateSource.ToString() + '\n'
 			); ;
+			StatusLCDs.SyncText();
+			ConsoleLCDs.SyncText();
 			Governor();
 		}
 	}
