@@ -26,11 +26,12 @@ namespace IngameScript {
 		public List<IMyTextSurface> ConnectedDisplays { get; } = new List<IMyTextSurface>();
 		/// <summary>
 		/// true: Immediately broadcasts WriteText to all connected displays.
-		/// false: Waits on manual BroadcastText() invocation.
+		/// false: Waits on manual SyncText/FlushText invocation.
+		/// false: Recommend if many appendages occur during a single cycle.
 		/// </summary>
 		public bool AutoSyncText { get; set; } = true;
 		/// <summary>
-		/// Syncs text with connected displays.
+		/// Syncs text to all connected displays.
 		/// </summary>
 		public void SyncText() {
 			foreach (IMyTextPanel Display in ConnectedDisplays) {
@@ -44,9 +45,6 @@ namespace IngameScript {
 			SyncText();
 			Text = new StringBuilder();
 		}
-		/// <summary>
-		/// Syncs text to all connected displays.
-		/// </summary>
 		private void WriteTextHook() {
 			if (AutoSyncText) SyncText();
 		}
