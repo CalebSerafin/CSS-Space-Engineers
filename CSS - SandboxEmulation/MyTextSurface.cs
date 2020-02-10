@@ -71,7 +71,7 @@ namespace IngameScript {
 			/// <summary>
 			/// Sets default values for Emulated Text Surface.
 			/// </summary>
-			public static MyTextSurface() {
+			public MyTextSurface() {
 				FontSize = 1.0f;
 				FontColor = Color.White;
 				BackgroundColor = Color.Black;

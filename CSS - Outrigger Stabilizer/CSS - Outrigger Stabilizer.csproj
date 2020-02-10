@@ -63,7 +63,7 @@
   <ItemGroup>
     <Content Include="Sudo Code.txt" />
   </ItemGroup>
-  <Import Project="..\SandboxEmulation\SandboxEmulation.projitems" Label="Shared" />
+  <Import Project="..\CSS - SandboxEmulation\CSS - SandboxEmulation.projitems" Label="Shared" />
   <Import Project="..\CSS - LCDNet\CSS - LCDNet.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
