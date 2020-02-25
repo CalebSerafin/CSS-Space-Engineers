@@ -22,7 +22,7 @@ namespace IngameScript {
 		private static string RenderMaxImpulseAxis() {
 			double RequiredNewtons = Math.Round(Cockpit.CalculateShipMass().TotalMass * GravAccel, 0);
 			int UnitPower = (int)Math.Floor(Math.Log10(RequiredNewtons) / 3);
-			double Shortened = RequiredNewtons / Math.Pow(10, UnitPower * 3);       //Inverse square faster than division
+			double Shortened = RequiredNewtons / Math.Pow(10, UnitPower * 3);
 			string Rendered = Shortened.ToString("N1");
 			string Unit;
 			switch (UnitPower) {

@@ -52,6 +52,23 @@
 			public static int ToArrayIndex(int Operation) {
 				return System.Array.IndexOf<string>(ToArray(), Text(Operation));
 			}
+
+			public static bool IsMoving(int Operation) {
+				switch (Operation) {
+					case 0: return true;    //Extending
+					case 1: return true;    //Retracting
+					case 2: return true;    //Stabilizing
+					case 3: return true;    //StabilizeCorrecting
+
+					case 10: return false;  //Extended
+					case 11: return false;  //Retracted
+					case 12: return false;  //Stabilized
+
+					case 20: return false;  //Broken
+
+					default: return false;  //Unknown
+				}
+			}
 		}
 	}
 }
