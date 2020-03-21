@@ -108,6 +108,14 @@ namespace IngameScript {
 				ConsoleLCDs.FlushText();
 				throw;
 			} catch (KlangSafetyException KlangSafety) {
+				Piston.Enabled = false;
+				OutRiggerRelease();
+				Lock.Enabled = false;
+				Foot.Enabled = true;
+				Foot.AutoLock = true;
+				Foot.Lock();
+				Runtime.UpdateFrequency = UpdateFrequency.None;
+
 				string ErrorMessageFormatted = "CRITICAL ERROR:\n" + KlangSafety.Message;
 				ConsoleLCDs.WriteText(ErrorMessageFormatted, false);
 				StatusLCDs.WriteText(ErrorMessageFormatted, false);
