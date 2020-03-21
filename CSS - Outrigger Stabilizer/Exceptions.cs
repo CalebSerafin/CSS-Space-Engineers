@@ -31,4 +31,17 @@ namespace IngameScript {
         : base(message, inner) {
         }
     }
+    class KlangSafetyException : Exception {
+        public KlangSafetyException() {
+
+        }
+
+        public KlangSafetyException(string Source)
+            : base(Source + " has triggered Klang safety mode.\nAll landing gears are released and program execution is suspended.\n") {
+        }
+
+        public KlangSafetyException(string message, Exception inner)
+        : base(message, inner) {
+        }
+    }
 }

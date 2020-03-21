@@ -50,6 +50,7 @@
   <Import Project="MDK/MDK.paths.props" Condition="exists('MDK/MDK.paths.props')" />
   <ItemGroup>
     <Compile Include="CheckUpdateFrequency.cs" />
+    <Compile Include="HandleArgs.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Governor.cs" />
     <Compile Include="PistonGetCurrentPosition.cs" />
