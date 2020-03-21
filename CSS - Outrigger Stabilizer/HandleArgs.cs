@@ -49,9 +49,8 @@ namespace IngameScript {
 				OutRiggerRelease();
 				Lock.Enabled = false;
 				Foot.Enabled = true;
-				Foot.AutoLock = false;
-				Foot.Unlock();
-				Foot.Enabled = false;
+				Foot.AutoLock = true;
+				Foot.Lock();
 				Runtime.UpdateFrequency = UpdateFrequency.None;
 				throw new KlangSafetyException("User");
 			}
