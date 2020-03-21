@@ -20,7 +20,7 @@ using VRageMath;
 namespace IngameScript {
 	partial class Program {
 		public Program() {
-			Runtime.UpdateFrequency = UpdateFrequency.Once | UpdateFrequency.Update100;
+			Runtime.UpdateFrequency = UpdateFrequency.Once;
 
 			OperationGraphic.ArrowText = "Op.=> ";
 			OperationGraphic.Options = Operations.ToArray();
