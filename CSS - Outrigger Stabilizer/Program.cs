@@ -68,7 +68,16 @@ namespace IngameScript {
 		private static Func<IMyTerminalBlock, bool> IsName(string CustNameString) {
 			return (Block) => Block.CustomName.Contains(CustNameString);
 		}
-		
+		private static void OutRiggerRelease() {
+			Lock.Enabled = true;
+			Lock.AutoLock = false;
+			Lock.Unlock();
+		}
+		private static void OutRiggerSecure() {
+			Lock.Enabled = true;
+			Lock.AutoLock = true;
+			Lock.Lock();
+		}
 
 		public void Save() {
 		}
@@ -77,6 +86,7 @@ namespace IngameScript {
 			try {
 				Warnings.Clear();
 				ResolveOperation();
+				HandleArgs(argument);
 				Governor();
 				CheckUpdateFrequency();
 

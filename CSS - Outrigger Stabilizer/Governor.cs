@@ -34,9 +34,8 @@ namespace IngameScript {
 				Foot.Unlock();
 			}
 			if (Operations.IsMoving(Operation) && Lock.IsLocked) {
-				Lock.Enabled = true;                            // Klang-tom Forces (Piston Force on Self Locked Landing Gear)
-				Lock.AutoLock = false;
-				Lock.Unlock();
+				OutRiggerRelease();								// Klang-tom Forces (Piston Force on Self Locked Landing Gear)
+				
 			}
 			if (Operation != Operations.Retracted) {            // Driving or movement confusing ResolveOperation
 				Cockpit.HandBrake = true;
