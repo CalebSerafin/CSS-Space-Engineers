@@ -50,6 +50,9 @@ namespace IngameScript {
 				Foot.Lock();
 				Foot.AutoLock = true;
 			}
+			if (!Operations.IsMoving(Operation)) {              // Automatically Secures piston when not moving
+				OutRiggerSecure();
+			}
 		}
 	}
 }
