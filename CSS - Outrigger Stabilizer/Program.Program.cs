@@ -26,10 +26,6 @@ namespace IngameScript {
 			OperationGraphic.Options = Operations.ToArray();
 			OperationGraphic.Selection = (UInt16)Operations.ToArrayIndex(-1);
 
-			CommandGraphic.ArrowText = "==> ";
-			CommandGraphic.Options = Commands.ToArray();
-			CommandGraphic.Selection = (UInt16)Commands.ToArrayIndex(-1);
-
 			List<IMyTerminalBlock> PistonsDubious = new List<IMyTerminalBlock>();
 			List<IMyTerminalBlock> LocksDubious = new List<IMyTerminalBlock>();
 			List<IMyTerminalBlock> FeetDubious = new List<IMyTerminalBlock>();

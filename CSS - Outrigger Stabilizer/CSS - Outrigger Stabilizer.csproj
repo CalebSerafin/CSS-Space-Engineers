@@ -56,7 +56,6 @@
     <Compile Include="Program.Program.cs" />
     <Compile Include="RenderMaxImpulseAxis.cs" />
     <Compile Include="ResolveOperation.cs" />
-    <Compile Include="Commands.cs" />
     <Compile Include="Operations.cs" />
     <Compile Include="OutrigStatus.cs" />
     <Compile Include="MDK\Bootstrapper.cs" />

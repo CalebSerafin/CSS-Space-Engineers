@@ -51,9 +51,7 @@ namespace IngameScript {
 		private static float GravAccel = 9.81f; // Placeholder Value until initialisation
 		// Persistent Variables
 		private static int Operation = Operations.Unknown;
-		private static int Command = Commands.PistonFollow;
 		StringGraphics.ArrowSelector OperationGraphic = new StringGraphics.ArrowSelector();
-		StringGraphics.ArrowSelector CommandGraphic = new StringGraphics.ArrowSelector();
 		LCDNet StatusLCDs = new LCDNet();
 		LCDNet ConsoleLCDs = new LCDNet();
 

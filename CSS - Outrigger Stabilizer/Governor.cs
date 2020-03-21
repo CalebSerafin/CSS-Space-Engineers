@@ -29,13 +29,9 @@ namespace IngameScript {
 				Foot.AutoLock = true;
 			}
 			if (Operation == Operations.StabilizeCorrecting) {  // Elastic Wheel Compression
-				if (Command == Commands.Stabilize) {
-					Piston.Enabled = false;
-				} else {
-					Foot.Enabled = true;
-					Foot.AutoLock = false;
-					Foot.Unlock();
-				}
+				Foot.Enabled = true;
+				Foot.AutoLock = false;
+				Foot.Unlock();
 			}
 			if (Operations.IsMoving(Operation) && Lock.IsLocked) {
 				Lock.Enabled = true;                            // Klang-tom Forces (Piston Force on Self Locked Landing Gear)
@@ -54,10 +50,6 @@ namespace IngameScript {
 				Foot.Enabled = true;
 				Foot.Lock();
 				Foot.AutoLock = true;
-			}
-			if (Command == Commands.PistonFollow && !Operations.IsMoving(Operation)) {	// Automatically Secures piston for auto mode
-				Lock.Enabled = true;
-				Lock.Lock();
 			}
 		}
 	}
