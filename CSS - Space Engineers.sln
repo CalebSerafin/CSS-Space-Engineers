@@ -13,12 +13,16 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CSS - LCDNet", "CSS - LCDNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSS - Goose Drill", "CSS - Goose Drill\CSS - Goose Drill.csproj", "{1626FF1E-854E-4D91-8443-5A25AB394AA2}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CSS - StringGraphics", "CSS - StringGraphics\CSS - StringGraphics.shproj", "{8CBDD12F-E37B-4308-967B-B19D96150F99}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CSS - LCDNet\CSS - LCDNet.projitems*{6c9d2f14-d68a-4a47-8bee-9dccdb4bea66}*SharedItemsImports = 13
+		CSS - StringGraphics\CSS - StringGraphics.projitems*{8cbdd12f-e37b-4308-967b-b19d96150f99}*SharedItemsImports = 13
 		CSS - SandboxEmulation\CSS - SandboxEmulation.projitems*{c18e4fde-ff11-4e2d-8308-9ea5b3040542}*SharedItemsImports = 13
 		CSS - LCDNet\CSS - LCDNet.projitems*{c419a104-2f00-4b5b-8da7-3db9f1d15808}*SharedItemsImports = 4
 		CSS - SandboxEmulation\CSS - SandboxEmulation.projitems*{c419a104-2f00-4b5b-8da7-3db9f1d15808}*SharedItemsImports = 4
+		CSS - StringGraphics\CSS - StringGraphics.projitems*{c419a104-2f00-4b5b-8da7-3db9f1d15808}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
