@@ -108,7 +108,7 @@ namespace IngameScript {
 				ConsoleLCDs.FlushText();
 				throw;
 			} catch (KlangSafetyException KlangSafety) {
-				string ErrorMessageFormatted = "CRITICAL DANGER:\n" + KlangSafety.Message;
+				string ErrorMessageFormatted = "CRITICAL ERROR:\n" + KlangSafety.Message;
 				ConsoleLCDs.WriteText(ErrorMessageFormatted, false);
 				StatusLCDs.WriteText(ErrorMessageFormatted, false);
 

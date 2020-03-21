@@ -47,9 +47,11 @@ namespace IngameScript {
 			if (Args.Contains("Klang", StringComparer.OrdinalIgnoreCase)) {         // When shit happens.
 				Piston.Enabled = false;
 				OutRiggerRelease();
+				Lock.Enabled = false;
 				Foot.Enabled = true;
 				Foot.AutoLock = false;
 				Foot.Unlock();
+				Foot.Enabled = false;
 				Runtime.UpdateFrequency = UpdateFrequency.None;
 				throw new KlangSafetyException("User");
 			}

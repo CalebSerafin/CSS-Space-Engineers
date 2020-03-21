@@ -33,9 +33,10 @@ namespace IngameScript {
 				Foot.AutoLock = false;
 				Foot.Unlock();
 			}
-			if (Operations.IsMoving(Operation) && Lock.IsLocked) {
-				OutRiggerRelease();								// Klang-tom Forces (Piston Force on Self Locked Landing Gear)
-				
+			if (!Operations.IsMoving(Operation) && Foot.IsLocked) {              // Automatically secures piston only when attached to ground
+				OutRiggerSecure();
+			} else {                                                            // Otherwise avoids Klang-tom Forces (Piston Force on Self Locked Landing Gear)
+				OutRiggerRelease();
 			}
 			if (Operation != Operations.Retracted) {            // Driving or movement confusing ResolveOperation
 				Cockpit.HandBrake = true;
@@ -48,11 +49,10 @@ namespace IngameScript {
 			if ((Cockpit.GetShipSpeed() > (Math.Abs(Piston.Velocity) * MoveDectect) && Operation != Operations.Retracted) || Operation == Operations.Extended) {  // Falling over while extended
 				Foot.Enabled = true;
 				Foot.Lock();
+
 				Foot.AutoLock = true;
 			}
-			if (!Operations.IsMoving(Operation)) {              // Automatically Secures piston when not moving
-				OutRiggerSecure();
-			}
+			
 		}
 	}
 }
