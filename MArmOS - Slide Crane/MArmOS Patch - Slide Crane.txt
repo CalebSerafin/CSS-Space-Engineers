@@ -1,0 +1,40 @@
+		void MArmOS_Configuration() {
+			string SCraneControl = "SCrane Control";
+			string ExtPistPrefix = "SCrane Ext Piston ";
+			int ExtPistCount = 8;
+			string LiftPistPrefix = "SCrane Lift Piston ";
+			int LiftPistCount = 6;
+			string AzimuthName = "SCrane Rotor Azimuth";
+			string TwistName = "SCrane Rotor Twist";
+
+			double LGGrabHeight = 22 * 2.5;
+			double LGMinGrabRadius = 3.5 * 2.5;
+
+			Rotor Azimuth = new Rotor(AzimuthName, "Z", MaxSpeed: 60);
+			Hardware MyArm = Azimuth;
+
+			for (int i = 1; i <= ExtPistCount; i++) {
+				MyArm += new Piston(
+					Name: ExtPistPrefix + i.ToString(),
+					Axis: "X",
+					MaxSpeed: 8
+				);
+			}
+			for (int i = 1; i <= LiftPistCount; i++) {
+				MyArm += new Piston(
+					Name: LiftPistPrefix + i.ToString(),
+					Axis: "-Z",
+					MaxSpeed: 8
+				);
+			}
+
+			MyArm += new SolidLG(X: LGMinGrabRadius, Y: 0, Z: LGGrabHeight);
+			Rotor Twist = new Rotor(TwistName, "-Z", 1, MaxSpeed: 60);
+			MyArm += Twist;
+
+			UserControl MyControl = new UserControl(
+				Arm: MyArm,
+				Name: SCraneControl,
+				ShipControllerKeyword: SCraneControl
+			);
+		}
