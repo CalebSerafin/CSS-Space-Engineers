@@ -45,9 +45,6 @@ namespace IngameScript {
 			SyncText();
 			Text = new StringBuilder();
 		}
-		private void WriteTextHook() {
-			if (AutoSyncText) SyncText();
-		}
 		public new bool WriteText(string value, bool append = false) {
 			try {
 				if (!append) {
@@ -57,7 +54,7 @@ namespace IngameScript {
 			} catch (Exception) {
 				return false;
 			}
-			WriteTextHook();
+			if (AutoSyncText) SyncText();
 			return true;
 		}
 		public new bool WriteText(System.Text.StringBuilder value, bool append = false) {
@@ -70,7 +67,7 @@ namespace IngameScript {
 			} catch (Exception) {
 				return false;
 			}
-			WriteTextHook();
+			if (AutoSyncText) SyncText();
 			return true;
 		}
 
