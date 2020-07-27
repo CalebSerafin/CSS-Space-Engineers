@@ -62,12 +62,6 @@ namespace IngameScript {
 		private static IMyLandingGear Lock;
 		private static IMyLandingGear Foot;
 		// Functions
-		private static Func<IMyTerminalBlock, bool> IsType(string TypeIdString) {
-			return (Block) => Block.BlockDefinition.TypeIdString.Contains(TypeIdString);
-		}
-		private static Func<IMyTerminalBlock, bool> IsName(string CustNameString) {
-			return (Block) => Block.CustomName.Contains(CustNameString);
-		}
 		private static void OutRiggerRelease() {
 			Lock.Enabled = true;
 			Lock.AutoLock = false;

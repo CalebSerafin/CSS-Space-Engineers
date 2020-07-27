@@ -16,6 +16,7 @@ using VRage.Game.ObjectBuilders.Definitions;
 using VRage.Game;
 using VRage;
 using VRageMath;
+using static CSS__Common.TerminalSystem;
 
 namespace IngameScript {
 	partial class Program {
@@ -26,30 +27,19 @@ namespace IngameScript {
 			OperationGraphic.Options = Operations.ToArray();
 			OperationGraphic.Selection = (UInt16)Operations.ToArrayIndex(-1);
 
-			List<IMyTerminalBlock> PistonsDubious = new List<IMyTerminalBlock>();
-			List<IMyTerminalBlock> LocksDubious = new List<IMyTerminalBlock>();
-			List<IMyTerminalBlock> FeetDubious = new List<IMyTerminalBlock>();
+			List<IMyExtendedPistonBase> PistonsDubious = new List<IMyExtendedPistonBase>();
+			List<IMyLandingGear> LocksDubious = new List<IMyLandingGear>();
+			List<IMyLandingGear> FeetDubious = new List<IMyLandingGear>();
 			List<IMyCockpit> Cockpits = new List<IMyCockpit>();
-			GridTerminalSystem.GetBlocksOfType<IMyPistonBase>(PistonsDubious, IsName(PistonName));
-			GridTerminalSystem.GetBlocksOfType<IMyLandingGear>(LocksDubious, IsName(LockName));
-			GridTerminalSystem.GetBlocksOfType<IMyLandingGear>(FeetDubious, IsName(FootName));
-			GridTerminalSystem.GetBlocksOfType<IMyCockpit>(Cockpits);
+			GridTerminalSystem.GetBlocksOfType(PistonsDubious, IsPartName(PistonName));
+			GridTerminalSystem.GetBlocksOfType(LocksDubious, IsPartName(LockName));
+			GridTerminalSystem.GetBlocksOfType(FeetDubious, IsPartName(FootName));
+			GridTerminalSystem.GetBlocksOfType(Cockpits);
 
-			foreach (IMyTerminalBlock PistonBase in PistonsDubious) {
-				if (!IsType("PistonBase")(PistonBase)) continue;
-				Piston = (IMyExtendedPistonBase)PistonBase;
-				break;
-			};
-			foreach (IMyTerminalBlock LandingGear in LocksDubious) {
-				if (!IsType("LandingGear")(LandingGear)) continue;
-				Lock = (IMyLandingGear)LandingGear;
-				break;
-			};
-			foreach (IMyTerminalBlock LandingGear in FeetDubious) {
-				if (!IsType("LandingGear")(LandingGear)) continue;
-				Foot = (IMyLandingGear)LandingGear;
-				break;
-			};
+			Piston = PistonsDubious.FirstOrDefault();
+			Lock = LocksDubious.FirstOrDefault();
+			Foot = FeetDubious.FirstOrDefault();
+
 			foreach (IMyCockpit X in Cockpits) {
 				if (!X.IsMainCockpit) continue;
 				Cockpit = X;
