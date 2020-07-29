@@ -35,10 +35,6 @@ namespace CSS_Common {
 	/// </summary>
 	public class UpdateEventHandlers {
 		/// <summary>
-		/// Array of EventHandlers to make automatic invocation require less repetitive code typing.
-		/// </summary>
-		private List<object> UpdateEventHandlerActions;
-		/// <summary>
 		/// Event handers here will not be executed more than once per cycle.
 		/// </summary>
 		public Dictionary<EventHandler<UpdateEventArgs>, UpdateType> Subscribers = new Dictionary<EventHandler<UpdateEventArgs>, UpdateType>();
@@ -47,37 +43,21 @@ namespace CSS_Common {
 		/// Subscribe to this event handler. Subscribing to multiple events may lead to multiple invocations in one cycle.
 		/// </summary>
 		public event EventHandler<UpdateEventArgs>
-			UpdateNone, //
-			UpdateTerminal, //1
-			UpdateTrigger, //2
-			UpdateMod, //8
-			UpdateScript, //16
+			None, //
+			Terminal, //1
+			Trigger, //2
+			Mod, //8
+			Script, //16
 			Update1, //32
 			Update10, //64
 			Update100, //128
-			UpdateOnce, //256
-			UpdateIGC; //512
-
-		private void RefreshList() {
-			UpdateEventHandlerActions = new List<object> {
-				UpdateNone, //
-				UpdateTerminal, //1
-				UpdateTrigger, //2
-				UpdateMod, //8
-				UpdateScript, //16
-				Update1, //32
-				Update10, //64
-				Update100, //128
-				UpdateOnce, //256
-				UpdateIGC //512
-			};
-		}
+			Once, //256
+			IGC; //512
 
 		/// <summary>
 		/// Constructs UpdateEventHandlerActions array.
 		/// </summary>
 		public UpdateEventHandlers() {
-			RefreshList();
 		}
 
 		/// <summary>
@@ -87,16 +67,20 @@ namespace CSS_Common {
 		/// <param name="updateSource">Main's updateSource</param>
 		public void CallUpdateEventHandlers(string argument, UpdateType updateSource) {
 			UpdateEventArgs Args = new UpdateEventArgs(argument, updateSource);
-			RefreshList();
-			((EventHandler<UpdateEventArgs>)UpdateEventHandlerActions[0])?.Invoke(this, Args); // Will always be called
-			for (int i = 1, flag = 1; i < 11; i++, flag <<= 1) {
-				if (flag == 0x4) continue; // Apparently it's not defined in UpdateType 🤷
-				if (updateSource.HasFlag((UpdateType)flag)) {
-					UpdateNone?.Invoke(this, new UpdateEventArgs(string.Format("Flag Passed: {0} ({1})", flag.ToString(), ((UpdateType)flag).ToString()), updateSource));
-					((EventHandler<UpdateEventArgs>)UpdateEventHandlerActions[i])?.Invoke(this, Args);
-				}
-			}
-			foreach (KeyValuePair<EventHandler<UpdateEventArgs>, UpdateType> EH in Subscribers.Where(pair => updateSource.HasFlag(pair.Value))) {
+
+			// If you have a DRY way that doesn't involving updating a list on every call: send me an email 🤷
+			if (updateSource.HasFlag(UpdateType.None)) None?.Invoke(this, Args); // Always invoked
+			if (updateSource.HasFlag(UpdateType.Terminal)) Terminal?.Invoke(this, Args);
+			if (updateSource.HasFlag(UpdateType.Trigger)) Trigger?.Invoke(this, Args);
+			if (updateSource.HasFlag(UpdateType.Mod)) Mod?.Invoke(this, Args);
+			if (updateSource.HasFlag(UpdateType.Script)) Script?.Invoke(this, Args);
+			if (updateSource.HasFlag(UpdateType.Update1)) Update1?.Invoke(this, Args);
+			if (updateSource.HasFlag(UpdateType.Update10)) Update10?.Invoke(this, Args);
+			if (updateSource.HasFlag(UpdateType.Update100)) Update100?.Invoke(this, Args);
+			if (updateSource.HasFlag(UpdateType.Once)) Once?.Invoke(this, Args);
+			if (updateSource.HasFlag(UpdateType.IGC)) IGC?.Invoke(this, Args);
+
+			foreach (KeyValuePair<EventHandler<UpdateEventArgs>, UpdateType> EH in Subscribers.Where(pair => (updateSource & pair.Value) != 0 || pair.Value == UpdateType.None)) {
 				EH.Key.Invoke(this, Args);
 			}
 		}

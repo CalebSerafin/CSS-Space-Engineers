@@ -49,11 +49,17 @@ namespace IngameScript {
 			Console = ConsoleProvider.GetSurface(0);
 			Console.ContentType = ContentType.TEXT_AND_IMAGE;
 			Console.Alignment = TextAlignment.CENTER;
-
-			UpdateEvents.UpdateNone += Pinger;
-			UpdateEvents.UpdateTerminal += DumpHKHistory;
-			UpdateEvents.UpdateTrigger += AddHKHistory;
+			/*
+			UpdateEvents.None += Pinger;
+			UpdateEvents.Terminal += DumpHKHistory;
+			UpdateEvents.Trigger += AddHKHistory;
 			UpdateEvents.Update100 += PopHKHistory;
+			*/
+
+			UpdateEvents.Subscribers[Pinger] = UpdateType.None;
+			UpdateEvents.Subscribers[DumpHKHistory] = UpdateType.Terminal;
+			UpdateEvents.Subscribers[AddHKHistory] = UpdateType.Trigger;
+			UpdateEvents.Subscribers[PopHKHistory] = UpdateType.None;
 		}
 
 		public void Save() {
