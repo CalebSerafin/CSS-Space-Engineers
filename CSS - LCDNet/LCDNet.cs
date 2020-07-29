@@ -21,6 +21,7 @@ using Sandbox.Game.GameSystems;
 namespace IngameScript {
 	/// <summary>
 	/// Requires shared project: CSS - SandboxEmulation
+	/// Allows printing of buffered Text over multiple displays.
 	/// </summary>
 	public class LCDNet : SandboxEmulation.MyTextSurface {
 		public List<IMyTextSurface> ConnectedDisplays { get; } = new List<IMyTextSurface>();

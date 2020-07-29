@@ -16,7 +16,7 @@ using VRage.Game.ObjectBuilders.Definitions;
 using VRage.Game;
 using VRage;
 using VRageMath;
-using static CSS__Common.TerminalSystem;
+using static CSS_Common.TerminalSystem;
 
 namespace IngameScript {
 	partial class Program {

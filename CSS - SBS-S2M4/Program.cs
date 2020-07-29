@@ -16,62 +16,57 @@ using VRage.Game.ObjectBuilders.Definitions;
 using VRage.Game;
 using VRage;
 using VRageMath;
+using CSS_Common;
 
 namespace IngameScript {
 	partial class Program : MyGridProgram {
-		// This file contains your actual script.
-		//
-		// You can either keep all your code here, or you can create separate
-		// code files to make your program easier to navigate while coding.
-		//
-		// In order to add a new utility class, right-click on your project, 
-		// select 'New' then 'Add Item...'. Now find the 'Space Engineers'
-		// category under 'Visual C# Items' on the left hand side, and select
-		// 'Utility Class' in the main area. Name it in the box below, and
-		// press OK. This utility class will be merged in with your code when
-		// deploying your final script.
-		//
-		// You can also simply create a new utility class manually, you don't
-		// have to use the template if you don't want to. Just do so the first
-		// time to see what a utility class looks like.
-		// 
-		// Go to:
-		// https://github.com/malware-dev/MDK-SE/wiki/Quick-Introduction-to-Space-Engineers-Ingame-Scripts
-		//
-		// to learn more about ingame scripts.
+		IMyTextSurfaceProvider ConsoleProvider;
+		IMyTextSurface Console;
+		Queue<string> ArgBuffer = new Queue<string>();
+		Dictionary<string, string> ConsoleBuffers = new Dictionary<string, string>();
+		UpdateEventHandlers UpdateEvents = new UpdateEventHandlers();
+
+		void PopHKHistory(object Sender, UpdateEventArgs e) {
+			if (ArgBuffer.Count > 0) ConsoleBuffers["HKHistory"] = e.updateSource.ToString() + ArgBuffer.Dequeue();
+		}
+		void DumpHKHistory(object Sender, UpdateEventArgs e) {
+			Echo("DumpHKHistory");
+			ConsoleBuffers["Terminal"] = ArgBuffer.Aggregate("Terminal", (History, Item) => History + Environment.NewLine + Item);
+			ArgBuffer.Clear();
+		}
+		void AddHKHistory(object Sender, UpdateEventArgs e) {
+			ArgBuffer.Enqueue(e.argument);
+		}
+		void Pinger(object Sender, UpdateEventArgs e) {
+			Echo("Ping!: " + e.argument + ", " + e.updateSource.ToString());
+		}
+
 
 		public Program() {
-			// The constructor, called only once every session and
-			// always before any other method is called. Use it to
-			// initialize your script. 
-			//     
-			// The constructor is optional and can be removed if not
-			// needed.
-			// 
-			// It's recommended to set Runtime.UpdateFrequency 
-			// here, which will allow your script to run itself without a 
-			// timer block.
+			Runtime.UpdateFrequency = UpdateFrequency.Update10 | UpdateFrequency.Update100;
+
+			TerminalSystem.GetBlockWithName(this, "SBS-Console", ref ConsoleProvider);
+			Console = ConsoleProvider.GetSurface(0);
+			Console.ContentType = ContentType.TEXT_AND_IMAGE;
+			Console.Alignment = TextAlignment.CENTER;
+
+			UpdateEvents.UpdateNone += Pinger;
+			UpdateEvents.UpdateTerminal += DumpHKHistory;
+			UpdateEvents.UpdateTrigger += AddHKHistory;
+			UpdateEvents.Update100 += PopHKHistory;
 		}
 
 		public void Save() {
-			// Called when the program needs to save its state. Use
-			// this method to save your state to the Storage field
-			// or some other means. 
-			// 
-			// This method is optional and can be removed if not
-			// needed.
 		}
 
 		public void Main(string argument, UpdateType updateSource) {
-			// The main entry point of the script, invoked every time
-			// one of the programmable block's Run actions are invoked,
-			// or the script updates itself. The updateSource argument
-			// describes where the update came from. Be aware that the
-			// updateSource is a  bitfield  and might contain more than 
-			// one update type.
-			// 
-			// The method itself is required, but the arguments above
-			// can be removed if not needed.
+			ConsoleBuffers["updateSource"] = "updateSource: " + updateSource.ToString();
+
+			UpdateEvents.CallUpdateEventHandlers(argument, updateSource);
+
+			Console.WriteText(
+				ConsoleBuffers.Aggregate("", (TextBuffer, Pair) => TextBuffer + Pair.Value + Environment.NewLine)
+			);
 		}
 	}
 }

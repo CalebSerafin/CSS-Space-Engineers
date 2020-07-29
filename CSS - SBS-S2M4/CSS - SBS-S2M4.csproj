@@ -51,6 +51,7 @@
     <AdditionalFiles Include="MDK\whitelist.cache" />
   </ItemGroup>
   <Import Project="..\CSS - Strike Bomber System\CSS - Strike Bomber System.projitems" Label="Shared" />
+  <Import Project="..\CSS - Common\CSS - Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="MDK\MDK.options.props" DestinationFolder="$(TargetDir)\MDK" />

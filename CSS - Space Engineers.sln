@@ -34,6 +34,7 @@ Global
 		CSS - LCDNet\CSS - LCDNet.projitems*{c419a104-2f00-4b5b-8da7-3db9f1d15808}*SharedItemsImports = 4
 		CSS - SandboxEmulation\CSS - SandboxEmulation.projitems*{c419a104-2f00-4b5b-8da7-3db9f1d15808}*SharedItemsImports = 4
 		CSS - StringGraphics\CSS - StringGraphics.projitems*{c419a104-2f00-4b5b-8da7-3db9f1d15808}*SharedItemsImports = 4
+		CSS - Common\CSS - Common.projitems*{fe06bcd7-3124-4841-8a88-fb7356c79e90}*SharedItemsImports = 4
 		CSS - Strike Bomber System\CSS - Strike Bomber System.projitems*{fe06bcd7-3124-4841-8a88-fb7356c79e90}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

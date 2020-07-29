@@ -6,9 +6,11 @@
     <SharedGUID>766bdbc4-38e8-4924-a207-718a2397e67d</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>CSS___Common</Import_RootNamespace>
+    <Import_RootNamespace>CSS_Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TerminalSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateEventHandler.cs" />
   </ItemGroup>
 </Project>
