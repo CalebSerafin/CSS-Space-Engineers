@@ -28,7 +28,6 @@ namespace IngameScript {
 		IMyCockpit Cockpit;
 		IMyCameraBlock Camera;
 		MyDetectedEntityInfo LastTargetData;
-		Vector3D MeGroundPos;
 		Queue<string> ArgBuffer = new Queue<string>();
 		Dictionary<string, string> ConsoleBuffers = new Dictionary<string, string>();
 		UpdateEventHandlers UpdateEvents = new UpdateEventHandlers();
@@ -51,45 +50,26 @@ namespace IngameScript {
 			if (!Camera.CanScan(4000)) return;
 			LastTargetData = Camera.Raycast(4000);
 		}
-		double ProjectileGroundInterceptTime(double RelativeTargetHeight) {
-			Vector3D PlanetPos;
-			Cockpit.TryGetPlanetPosition(out PlanetPos);
-			Vector3D MeVelocity = Cockpit.GetShipVelocities().LinearVelocity;
-			Vector3D MeGravity = Cockpit.GetNaturalGravity();
-
-			double S, U, V, A, T; // Equations of motion in SUVAT notation.
-			S = RelativeTargetHeight;
+		double ProjectileGroundInterceptTime(double HeightAboveTarget, Vector3D MeVelocity, Vector3D MeGravity) {
+			double S, U, A, T; // Equations of motion in SUVAT notation.
+			S = HeightAboveTarget;
 			A = MeGravity.Length();
 			U = MeVelocity.Dot(Vector3D.Normalize(MeGravity)) / A; //Extract down vector
 
 			// S = U * T + 0.5 * A T*T    // T = (-U +Math.Sqrt( U*U -4*(0.5*A)*(-S) ))/(2*0.5*A)
-			T = /*Math.Max(*/(-U + Math.Sqrt(U * U - 2 * A * S)) / A/*,(-U - Math.Sqrt(U * U - 2 * A * S)) / A)*/;
+			T = (-U + Math.Sqrt(U * U - 2 * A * S)) / A;
 			return T;
 		}
-		double ProjectileLateralTravelDistance(double TimeIntercept) {
-			Vector3D PlanetPos;
-			Cockpit.TryGetPlanetPosition(out PlanetPos);
-			Vector3D MeVelocity = Cockpit.GetShipVelocities().LinearVelocity;
-			Vector3D MeGravity = Cockpit.GetNaturalGravity();
-			Vector3D ToTarget = (LastTargetData.HitPosition ?? MeGroundPos) - MeGroundPos;
+		double ProjectileLateralTravelDistance(double TimeIntercept, Vector3D GroundPosToTarget, Vector3D MeVelocity) {
 			//ConsoleBuffers["LastTargetData"] = $"LastTargetData: {(LastTargetData.HitPosition ?? MeGroundPos).ToString("F0")}";
 			//ConsoleBuffers["MeGroundPos"] = $"MeGroundPos: {MeGroundPos.ToString("F0")}";
 			//ConsoleBuffers["ToTarget"] = $"ToTarget: {ToTarget.ToString("F0")}";
 
-			double S, U, A, T; // Equations of motion in SUVAT notation.
-			A = MeGravity.Dot(Vector3D.Normalize(ToTarget));
-			U = MeVelocity.Dot(Vector3D.Normalize(ToTarget));
+			double S, U, T; // Equations of motion in SUVAT notation.
+			U = MeVelocity.Dot(Vector3D.Normalize(GroundPosToTarget));
 			T = TimeIntercept;
-			S = (U * T) + (0.5 * A * T * T);
+			S = U * T;
 			return S;
-		}
-		double TimeToVector(Vector3D Pos, Vector3D Target, Vector3D LinearVelocity) {
-			Vector3D ToTarget = Target - Pos;
-			double S, U, V, A, T; // Equations of motion in SUVAT notation.
-			U = LinearVelocity.Dot(Vector3D.Normalize(ToTarget));
-			S = Vector3D.Distance(Pos, Target);
-			T = S / U;
-			return T;
 		}
 		void UpdateReletiveTargetData(object Sender, UpdateEventArgs e) { // Only works in atmosphere
 			Vector3D PlanetPos;
@@ -104,26 +84,22 @@ namespace IngameScript {
 			double RelativeTargetHeight = TargetHeight - MeHeight; // Should be negative when aircraft is above
 
 			Vector3D RelativePlanetPos = PlanetPos - MePos;
-			Vector3D MeRelativeGroundPos;
-			MeRelativeGroundPos = RelativePlanetPos * (1 - (TargetHeight / MeHeight));
-			MeGroundPos = MePos + MeRelativeGroundPos;
+			Vector3D MeRelativeGroundPos = RelativePlanetPos * (-RelativeTargetHeight / MeHeight);
+			Vector3D MeGroundPos = MePos + MeRelativeGroundPos;
+			Vector3D GroundPosToTarget = TargetPos - MeGroundPos;
 
 			double S, U, V, A, T; // Equations of motion in SUVAT notation.
-			T = ProjectileGroundInterceptTime(RelativeTargetHeight);
-			S = ProjectileLateralTravelDistance(T);
-			double DropDistance = Math.Sqrt((S * S) + (RelativeTargetHeight * RelativeTargetHeight));
+			T = ProjectileGroundInterceptTime(RelativeTargetHeight, Cockpit.GetShipVelocities().LinearVelocity, Cockpit.GetNaturalGravity());
+			S = ProjectileLateralTravelDistance(T, GroundPosToTarget, Cockpit.GetShipVelocities().LinearVelocity);
 			double GroundDistanceToDrop = Vector3D.Distance(MeGroundPos, TargetPos) - S;
+			double TimeUntilDrop = GroundDistanceToDrop / Cockpit.GetShipVelocities().LinearVelocity.Dot(Vector3D.Normalize(GroundPosToTarget));
 
 			Vector3D RelativePlanetPosFromTarget = PlanetPos - MePos;
-			Vector3D RelativeDropPosFromTarget;
-
-			double TimeToDrop = TimeToVector(MeGroundPos, TargetPos, Cockpit.GetShipVelocities().LinearVelocity);
 
 			ConsoleBuffers["GroundIntercept"] = $"GroundIntercept: {T:F0}s";
-			ConsoleBuffers["GlideDistance"] = $"GlideDistance: {S:F0}m";
-			ConsoleBuffers["DropFrom"] = $"DropFrom: {DropDistance:F0}m";
+			ConsoleBuffers["LateralGlideDistance"] = $"LateralGlideDistance: {S:F0}m";
 			ConsoleBuffers["GroundDistanceUntillDrop"] = $"GroundDistanceUntillDrop: {GroundDistanceToDrop:F0}m";
-			ConsoleBuffers["TimeToDrop"] = $"TimeToDrop: {TimeToDrop:F0}s";
+			ConsoleBuffers["TimeUntilDrop"] = $"TimeUntilDrop: {TimeUntilDrop:F0}s";
 		}
 
 		public Program() {
