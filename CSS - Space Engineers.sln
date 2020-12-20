@@ -23,6 +23,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CSS - Strike Bomber System"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CSS - Common", "CSS - Common\CSS - Common.shproj", "{766BDBC4-38E8-4924-A207-718A2397E67D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MDK-Debug", "MDK-Debug", "{B5668F6E-C804-40B8-89A5-EC4D8FE1104C}"
+	ProjectSection(SolutionItems) = preProject
+		MDK-Debug\MDK-Debug.dll = MDK-Debug\MDK-Debug.dll
+		MDK-Debug\MDK-Debug.pdb = MDK-Debug\MDK-Debug.pdb
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CSS - Strike Bomber System\CSS - Strike Bomber System.projitems*{04e4ca5e-530e-4e5e-ab92-f7e3f16f7f84}*SharedItemsImports = 13

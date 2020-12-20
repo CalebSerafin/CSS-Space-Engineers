@@ -1,4 +1,5 @@
 ﻿using Microsoft.SqlServer.Server;
+using Sandbox.Game.Localization;
 using Sandbox.ModAPI.Ingame;
 using System;
 using System.Collections.Generic;
@@ -29,18 +30,37 @@ namespace CSS_Common {
 	}
 
 	/// <summary>
-	/// Allows easily subscribing event handlers.
-	/// UpdateNone events will be called on every update.
-	/// Note: this does not set Runtime.UpdateFrequency/
+	/// Contains target UpdateType and other information for debugging.
 	/// </summary>
-	public class UpdateEventHandlers {
+	public struct EventHandlerMeta {
+		public EventHandlerMeta(UpdateType TargetUpdateType, string FriendlyName) {
+			this.TargetUpdateType = TargetUpdateType;
+			this.FriendlyName = FriendlyName;
+			TimeSubscribed = DateTime.UtcNow;
+		}
+		public override string ToString() {
+			return $"[TargetUpdateType: {TargetUpdateType.ToString()}; FriendlyName: {FriendlyName}; TimeSubscribed: {TimeSubscribed.ToString()}]";
+		}
+		public UpdateType TargetUpdateType;
+		public string FriendlyName;
+		public DateTime TimeSubscribed;
+	};
+
+/// <summary>
+/// Allows easily subscribing event handlers.
+/// UpdateNone events will be called on every update.
+/// Note: this does not set Runtime.UpdateFrequency.
+/// </summary>
+public class UpdateEventHandlers {
 		/// <summary>
+		/// If your EH is assigned to multiple UpdateEvents, use this instead.
 		/// Event handers here will not be executed more than once per cycle.
 		/// </summary>
-		public Dictionary<EventHandler<UpdateEventArgs>, UpdateType> Subscribers = new Dictionary<EventHandler<UpdateEventArgs>, UpdateType>();
+		public Dictionary<EventHandler<UpdateEventArgs>, EventHandlerMeta> Subscribers = new Dictionary<EventHandler<UpdateEventArgs>, EventHandlerMeta>();
 
 		/// <summary>
-		/// Subscribe to this event handler. Subscribing to multiple events may lead to multiple invocations in one cycle.
+		/// If your EH is only assigned to a single UpdateEvent, use this.
+		/// Subscribing to multiple events may lead to multiple invocations in one cycle.
 		/// </summary>
 		public event EventHandler<UpdateEventArgs>
 			None, //
@@ -69,7 +89,7 @@ namespace CSS_Common {
 			UpdateEventArgs Args = new UpdateEventArgs(argument, updateSource);
 
 			// If you have a DRY way that doesn't involving updating a list on every call: send me an email 🤷
-			if (updateSource.HasFlag(UpdateType.None)) None?.Invoke(this, Args); // Always invoked
+			None?.Invoke(this, Args); // Always invoked
 			if (updateSource.HasFlag(UpdateType.Terminal)) Terminal?.Invoke(this, Args);
 			if (updateSource.HasFlag(UpdateType.Trigger)) Trigger?.Invoke(this, Args);
 			if (updateSource.HasFlag(UpdateType.Mod)) Mod?.Invoke(this, Args);
@@ -80,7 +100,9 @@ namespace CSS_Common {
 			if (updateSource.HasFlag(UpdateType.Once)) Once?.Invoke(this, Args);
 			if (updateSource.HasFlag(UpdateType.IGC)) IGC?.Invoke(this, Args);
 
-			foreach (KeyValuePair<EventHandler<UpdateEventArgs>, UpdateType> EH in Subscribers.Where(pair => (updateSource & pair.Value) != 0 || pair.Value == UpdateType.None)) {
+			foreach (
+			KeyValuePair<EventHandler<UpdateEventArgs>, EventHandlerMeta> EH in
+			Subscribers.Where(pair => (updateSource & pair.Value.TargetUpdateType) != 0 || pair.Value.TargetUpdateType == UpdateType.None)) {
 				EH.Key.Invoke(this, Args);
 			}
 		}
