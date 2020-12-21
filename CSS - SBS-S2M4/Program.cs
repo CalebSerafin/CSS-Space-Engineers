@@ -96,10 +96,14 @@ namespace IngameScript {
 
 			Vector3D RelativePlanetPosFromTarget = PlanetPos - MePos;
 
-			ConsoleBuffers["GroundIntercept"] = $"GroundIntercept: {T:F0}s";
-			ConsoleBuffers["LateralGlideDistance"] = $"LateralGlideDistance: {S:F0}m";
-			ConsoleBuffers["GroundDistanceUntillDrop"] = $"GroundDistanceUntillDrop: {GroundDistanceToDrop:F0}m";
-			ConsoleBuffers["TimeUntilDrop"] = $"TimeUntilDrop: {TimeUntilDrop:F0}s";
+			Vector3D ToRight = Vector3D.Normalize(GroundPosToTarget.Cross(MeGravity));
+			double ToRightCorrection = Vector3D.Normalize(MeVelocity).Dot(ToRight);
+			double ToRightCorrectionAngle = Math.Asin(ToRightCorrection) / Math.PI * 180;
+			string ToRightText = ToRightCorrectionAngle >= 0 ? "Right" : "Left";
+
+			ConsoleBuffers["ToRightCorrectionAngle"] = $"To {ToRightText}: {Math.Abs(ToRightCorrectionAngle):F1}°";
+			ConsoleBuffers["TimeUntilDrop"] = $"Time until Drop: {TimeUntilDrop:F1}s";
+			ConsoleBuffers["GroundDistanceUntillDrop"] = $"Distance until Drop: {GroundDistanceToDrop:F1}m";
 		}
 
 		public Program() {
